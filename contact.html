@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Morakay Pork</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <nav id="main-nav"></nav>
+
+    <header class="hero" style="padding: 80px 5%;">
+        <h1>Get in <span>Touch</span></h1>
+        <p>Have questions about our fresh cuts? We're here to help!</p>
+    </header>
+
+    <section class="contact-grid-container">
+        <div class="info-cards">
+            <div class="contact-card-item">
+                <div class="icon-box">📞</div>
+                <div>
+                    <h4>Phone & WhatsApp</h4>
+                    <p>+234 800 000 0000</p>
+                </div>
+            </div>
+            <div class="contact-card-item">
+                <div class="icon-box">📸</div>
+                <div>
+                    <h4>Instagram</h4>
+                    <p>@morakaypork</p>
+                </div>
+            </div>
+            <div class="contact-card-item">
+                <div class="icon-box">📍</div>
+                <div>
+                    <h4>Location</h4>
+                    <p>Lagos, Nigeria</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-wrapper">
+            <h3>Send us a Message</h3>
+            <form id="contact-form" action="thank-you.html" method="POST">
+                <div class="input-group">
+                    <label>Your Name</label>
+                    <input type="text" placeholder="Full Name" required aria-label="Full name">
+                </div>
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="email@example.com" required aria-label="Email address">
+                </div>
+                <div class="input-group">
+                    <label>Message</label>
+                    <textarea placeholder="How can we help you?" rows="5" required aria-label="Message"></textarea>
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">Send Message</button>
+            </form>
+        </div>
+    </section>
+
+    <aside id="cart-drawer"></aside>
+
+    <footer id="main-footer"></footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

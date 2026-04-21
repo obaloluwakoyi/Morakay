@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Join the Club | Morakay Pork</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="auth-page">
+    <nav id="main-nav"></nav>
+
+    <div class="split-screen" style="flex-direction: row-reverse;">
+        <div class="auth-visual"
+            style="background-image: linear-gradient(rgba(26, 42, 58, 0.8), rgba(26, 42, 58, 0.8)), url('https://images.unsplash.com/photo-1602470520998-f4a52199a3d6?q=80&w=1200');">
+            <div class="visual-content">
+                <h1>Join the <span>Family</span></h1>
+                <p>Create an account today and get exclusive access to our premium smoked specialties.</p>
+            </div>
+        </div>
+
+        <div class="auth-form-container">
+            <div class="auth-form-box">
+                <a href="index.html"><img src="images/logo.png" alt="Logo" class="auth-logo"></a>
+                <h2>Create Account</h2>
+                <p class="auth-subtitle">Join us for the best farm-to-table experience.</p>
+
+                <p id="auth-error" class="auth-message auth-message-error" style="display: none;"></p>
+
+                <form id="signup-form" action="signin.html" method="POST">
+                    <div class="input-group">
+                        <label for="su-name">Full Name</label>
+                        <input id="su-name" name="fullName" type="text" placeholder="John Doe" required
+                            autocomplete="name" aria-label="Full name">
+                    </div>
+                    <div class="input-group">
+                        <label for="su-email">Email Address</label>
+                        <input id="su-email" name="email" type="email" placeholder="email@example.com" required
+                            autocomplete="email" aria-label="Email address">
+                    </div>
+                    <div class="input-group">
+                        <label for="su-phone">Phone Number</label>
+                        <input id="su-phone" name="phone" type="tel" placeholder="+234 801 234 5678"
+                            autocomplete="tel" aria-label="Phone number">
+                    </div>
+                    <div class="input-group">
+                        <label for="su-password">Create Password</label>
+                        <input id="su-password" name="password" type="password" placeholder="Create a password"
+                            required autocomplete="new-password" aria-label="Password">
+                    </div>
+                    <div class="input-group">
+                        <label for="su-password-confirm">Confirm Password</label>
+                        <input id="su-password-confirm" name="confirmPassword" type="password"
+                            placeholder="Re-enter your password" required autocomplete="new-password"
+                            aria-label="Confirm password">
+                    </div>
+                    <button type="submit" class="btn-primary auth-btn">Register Now</button>
+                </form>
+
+                <p class="auth-footer">Already have an account? <a href="signin.html">Sign in here</a></p>
+            </div>
+        </div>
+    </div>
+
+    <aside id="cart-drawer"></aside>
+    <footer id="main-footer"></footer>
+    <script src="script.js"></script>
+    <script src="auth.js"></script>
+</body>
+
+</html>

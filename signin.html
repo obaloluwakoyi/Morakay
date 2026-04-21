@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In | Morakay Pork</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="auth-page">
+    <nav id="main-nav"></nav>
+
+    <div class="split-screen">
+        <div class="auth-visual">
+            <div class="visual-content">
+                <h1>The <span>Morakay</span> Standard</h1>
+                <p>Authentic farm-fresh pork processed with excellence and delivered to your doorstep.</p>
+            </div>
+        </div>
+
+        <div class="auth-form-container">
+            <div class="auth-form-box">
+                <a href="index.html"><img src="images/logo.png" alt="Logo" class="auth-logo"></a>
+                <h2>Welcome Back</h2>
+                <p class="auth-subtitle">Log in to manage your orders.</p>
+
+                <p id="auth-error" class="auth-message auth-message-error" style="display: none;"></p>
+
+                <form id="signin-form" action="index.html" method="POST">
+                    <div class="input-group">
+                        <label for="si-email">Email Address</label>
+                        <input id="si-email" name="email" type="email" placeholder="Enter your email" required
+                            autocomplete="email" aria-label="Email address">
+                    </div>
+                    <div class="input-group" style="margin-bottom: 5px;">
+                        <label for="si-password">Password</label>
+                        <input id="si-password" name="password" type="password" placeholder="Enter your password"
+                            required autocomplete="current-password" aria-label="Password">
+                    </div>
+
+                    <div style="text-align: right; margin-bottom: 20px;">
+                        <a href="forgot-password.html"
+                            style="font-size: 0.8rem; color: var(--text-muted); text-decoration: none; font-weight: 600;">Forgot
+                            Password?</a>
+                    </div>
+
+                    <button type="submit" class="btn-primary auth-btn">Sign In</button>
+                </form>
+
+                <p class="auth-footer">New to Morakay? <a href="signup.html">Create an account</a></p>
+            </div>
+        </div>
+    </div>
+
+    <aside id="cart-drawer"></aside>
+    <footer id="main-footer"></footer>
+    <script src="script.js"></script>
+    <script src="auth.js"></script>
+</body>
+
+</html>
