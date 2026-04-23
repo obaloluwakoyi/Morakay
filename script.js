@@ -14,9 +14,10 @@ const STORAGE_KEYS = {
   cart: 'mkCart',
   user: 'mkUser',
   users: 'mkUsers',
+  orders: 'mkOrders',
 };
 
-const PUBLIC_PAGES = ['signin.html', 'signup.html', 'forgot-password.html'];
+const PUBLIC_PAGES = ['index.html', 'products.html', 'about.html', 'contact.html', 'signin.html', 'signup.html', 'forgot-password.html', 'thank-you.html'];
 
 // ── STATE ────────────────────────────────────────────────────
 let cart = readStorage(STORAGE_KEYS.cart, []);
@@ -268,6 +269,7 @@ function buildNav() {
   const cartCount = cart.reduce((s, i) => s + i.qty, 0);
   const authLinks = currentUser
     ? `<span style="color:var(--text-muted);font-size:0.8rem;font-weight:600;">Hi, ${getUserDisplayName(currentUser)}</span>
+       <a href="dashboard.html" class="${isPage('dashboard') ? 'active' : ''}">Dashboard</a>
        <a href="#" onclick="logout()" class="logout-link">Logout</a>`
     : `<a href="signin.html">Sign In</a><a href="signup.html" class="btn-primary" style="padding:10px 18px;">Join</a>`;
 
@@ -427,17 +429,43 @@ function removeFromCart(idx) {
   saveCart();
 }
 
+function saveOrderToHistory(order) {
+  if (!currentUser) return;
+  const historyKey = `${STORAGE_KEYS.orders}_${currentUser.id}`;
+  const history = readStorage(historyKey, []);
+  history.push({ ...order, date: new Date().toISOString() });
+  localStorage.setItem(historyKey, JSON.stringify(history));
+}
+
 function sendWhatsApp() {
   if (cart.length === 0) return;
+  if (!currentUser) {
+    window.location.href = getSigninRedirectUrl();
+    return;
+  }
   const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const items = cart.map(i => `• ${i.name} x${i.qty} = ₦${(i.price*i.qty).toLocaleString()}`).join('%0A');
   const msg = `Hello Morakay Pork! 🥩%0A%0AMy Order:%0A${items}%0A%0ATotal: ₦${total.toLocaleString()}%0A%0APlease confirm my order.`;
   window.open(`https://wa.me/${CONFIG.WHATSAPP}?text=${msg}`, '_blank');
+  
+  saveOrderToHistory({
+    items: cart.map(i => ({ name: i.name, qty: i.qty, price: i.price, subtotal: i.price * i.qty })),
+    total: total,
+    paymentMethod: 'WhatsApp',
+  });
+  
+  cart = [];
+  saveCart();
+  toggleCart();
 }
 
 // ── CHECKOUT MODAL ────────────────────────────────────────────
 function openCheckout() {
   if (cart.length === 0) { alert('Your basket is empty!'); return; }
+  if (!currentUser) {
+    window.location.href = getSigninRedirectUrl();
+    return;
+  }
 
   const total = cart.reduce((s, i) => s + i.price * i.qty, 0);
   const delivery = total < 10000 ? 2500 : 0;
@@ -528,6 +556,8 @@ async function placeOrder(grandTotal) {
   } catch (e) {
     console.warn('Backend unreachable, order logged locally.', e);
   }
+
+  saveOrderToHistory(orderPayload);
 
   // Clear cart and show success
   cart = [];
@@ -717,9 +747,43 @@ const SPECIAL_PACKAGES = [
   },
 ];
 
+function searchProducts(query) {
+  const q = query.toLowerCase().trim();
+  const gridContainer = document.querySelector('.product-grid');
+  if (!q) {
+      renderProducts(gridContainer, window.allProducts);
+      return;
+  }
+  const filtered = window.allProducts.filter(p => 
+      p.name.toLowerCase().includes(q) || 
+      p.desc.toLowerCase().includes(q) || 
+      p.category.toLowerCase().includes(q)
+  );
+  
+  const filteredSpecial = SPECIAL_PACKAGES.filter(p => 
+      p.name.toLowerCase().includes(q) || 
+      p.desc.toLowerCase().includes(q)
+  );
+  window.filteredSpecial = filteredSpecial.length ? filteredSpecial : null;
+  
+  renderProducts(gridContainer, filtered);
+}
+
 async function loadProducts() {
   const grid = document.querySelector('.product-grid');
   if (!grid) return;
+
+  let wrapper = document.getElementById('products-wrapper');
+  if (!wrapper) {
+      wrapper = document.createElement('div');
+      wrapper.id = 'products-wrapper';
+      grid.parentNode.insertBefore(wrapper, grid);
+      wrapper.appendChild(grid);
+      
+      const searchBox = document.createElement('div');
+      searchBox.innerHTML = `<input type="text" id="product-search" placeholder="🔍 Search for products, categories, cuts..." style="width:100%; padding: 15px; margin-bottom: 20px; border: 2px solid #edf2f7; background: #f8fafc; font-family: inherit; font-size: 1rem; color: var(--navy); border-radius: 6px;" oninput="searchProducts(this.value)">`;
+      wrapper.insertBefore(searchBox, grid);
+  }
 
   let products = DEMO_PRODUCTS;
 
@@ -730,6 +794,8 @@ async function loadProducts() {
     }
   } catch(e) {}
 
+  window.allProducts = products;
+  window.filteredSpecial = null;
   renderProducts(grid, products);
 }
 
@@ -768,16 +834,17 @@ function renderProducts(grid, products) {
   }).join('');
 
   // Special Packages section
-  const spSection = `
+  const specialList = window.filteredSpecial || SPECIAL_PACKAGES;
+  const spSection = specialList.length ? `
     <section class="product-category-section" data-cat="Special Packages" style="display:none;">
       <div style="padding:10px 8px 0;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:10px;">
         <span style="background:#27ae60;color:#fff;font-size:0.7rem;font-weight:800;padding:4px 10px;text-transform:uppercase;letter-spacing:1px;">🎁 Special Packages</span>
         <span style="color:var(--text-muted);font-size:0.85rem;">Promo combos — best value, limited time only</span>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:25px;padding:10px 8px 40px;">
-        ${SPECIAL_PACKAGES.map(pkg => specialPackageCard(pkg)).join('')}
+        ${specialList.map(pkg => specialPackageCard(pkg)).join('')}
       </div>
-    </section>`;
+    </section>` : '';
 
   // Lucky Draw section
   const ldSection = `
